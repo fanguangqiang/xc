@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fan.system.dao.SysMenuDao">
+
+    <resultMap id="BaseResultMap" type="com.fan.system.entity.SysMenu">
+        <!--@Table sys_menu-->
+        <result property="menuId" column="menu_id" jdbcType="INTEGER"/>
+        <result property="menuName" column="menu_name" jdbcType="VARCHAR"/>
+        <result property="parentId" column="parent_id" jdbcType="INTEGER"/>
+        <result property="path" column="path" jdbcType="VARCHAR"/>
+        <result property="component" column="component" jdbcType="VARCHAR"/>
+        <result property="perms" column="perms" jdbcType="VARCHAR"/>
+        <result property="icon" column="icon" jdbcType="VARCHAR"/>
+        <result property="menuState" column="menu_state" jdbcType="INTEGER"/>
+        <result property="menuType" column="menu_type" jdbcType="INTEGER"/>
+        <result property="remark" column="remark" jdbcType="VARCHAR"/>
+        <result property="createUser" column="create_user" jdbcType="INTEGER"/>
+        <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+        <result property="updateUser" column="update_user" jdbcType="INTEGER"/>
+        <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+        <result property="orderNum" column="order_num" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <!--    collection ：关联关系，是实现一对多的关键
+            property ：javabean中容器对应字段名
+            ofType ：指定集合中元素的对象类型
+            select ：使用另一个查询封装的结果
+            column ：数据库中的列名，与 select 配合使用-->
+    <resultMap id="Menus" type="com.fan.system.entity.SysMenu" extends="BaseResultMap">
+        <collection property="children" ofType="com.fan.system.entity.SysMenu">
+            <id column="id2" property="menuId" />
+            <result column="path2" property="path" />
+            <result column="component2" property="component" />
+            <result column="createTime2" property="createTime" />
+            <result column="name2" property="menuName" />
+            <result column="iconCls2" property="icon" />
+            <result column="parentId2" property="parentId" />
+            <result column="perms2" property="perms"  />
+            <result column="menuType2" property="menuType" />
+            <result column="menuState2" property="menuState" />
+            <result column="orderNum2" property="orderNum" />
+        </collection>
+    </resultMap>
+
+    <select id="getMenusByUserId" parameterType="long" resultMap="BaseResultMap">
+        SELECT DISTINCT m1.menu_id, m1.menu_name, m1.parent_id, m1.path, m1.component, m1.perms, m1.icon,
+          m1.menu_state, m1.menu_type, m1.remark, m1.create_user, m1.create_time, m1.update_user, m1.update_time, m1.order_num
+        FROM
+            sys_menu m1,
+            sys_user_role ar,
+            sys_role_menu mr
+        WHERE
+            ar.user_id = #{userId}
+            AND ar.role_id = mr.role_id
+            AND mr.menu_id = m1.menu_id
+            AND m1.menu_state = 1
+            AND m1.menu_type &lt;= 1
+        ORDER BY
+        m1.menu_id
+    </select>
+
+
+    <select id="getMenuList" resultMap="BaseResultMap">
+        SELECT DISTINCT m1.menu_id, m1.menu_name, m1.parent_id, m1.path, m1.component, m1.perms, m1.icon,
+        m1.menu_state, m1.menu_type, m1.remark, m1.create_user, m1.create_time, m1.update_user, m1.update_time, m1.order_num
+        FROM
+        sys_menu m1,
+        sys_user_role ar,
+        sys_role_menu mr
+        WHERE
+        ar.user_id = #{userId}
+        AND ar.role_id = mr.role_id
+        AND mr.menu_id = m1.menu_id
+        <if test="sysMenu.menuName!=null and sysMenu.menuName!=''">
+          and m1.menu_name like CONCAT('%', #{sysMenu.menuName}, '%')
+        </if>
+        <if test="sysMenu.menuType!=null and sysMenu.menuType!=''">
+            and m1.menu_type = #{sysMenu.menuType}
+        </if>
+        ORDER BY
+        m1.menu_id
+    </select>
+    <!--&lt;!&ndash;查询单个&ndash;&gt;
+    <select id="queryById" resultMap="BaseResultMap">
+        select
+          menu_id, menu_name, parent_id, path, component, perms, icon, menu_state, menu_type, remark, create_user, create_time, update_user, update_time, order_num
+        from xc.sys_menu
+        where menu_id = #{menuId}
+    </select>
+
+    &lt;!&ndash;查询指定行数据&ndash;&gt;
+    <select id="queryAllByLimit" resultMap="BaseResultMap">
+        select
+          menu_id, menu_name, parent_id, path, component, perms, icon, menu_state, menu_type, remark, create_user, create_time, update_user, update_time, order_num
+        from xc.sys_menu
+        limit #{offset}, #{limit}
+    </select>
+
+    &lt;!&ndash;通过实体作为筛选条件查询&ndash;&gt;
+    <select id="queryAll" resultMap="BaseResultMap">
+        select
+          menu_id, menu_name, parent_id, path, component, perms, icon, menu_state, menu_type, remark, create_user, create_time, update_user, update_time, order_num
+        from xc.sys_menu
+        <where>
+            <if test="menuId != null">
+                and menu_id = #{menuId}
+            </if>
+            <if test="menuName != null and menuName != ''">
+                and menu_name = #{menuName}
+            </if>
+            <if test="parentId != null">
+                and parent_id = #{parentId}
+            </if>
+            <if test="path != null and path != ''">
+                and path = #{path}
+            </if>
+            <if test="component != null and component != ''">
+                and component = #{component}
+            </if>
+            <if test="perms != null and perms != ''">
+                and perms = #{perms}
+            </if>
+            <if test="icon != null and icon != ''">
+                and icon = #{icon}
+            </if>
+            <if test="menuState != null">
+                and menu_state = #{menuState}
+            </if>
+            <if test="menuType != null">
+                and menu_type = #{menuType}
+            </if>
+            <if test="remark != null and remark != ''">
+                and remark = #{remark}
+            </if>
+            <if test="createUser != null">
+                and create_user = #{createUser}
+            </if>
+            <if test="createTime != null">
+                and create_time = #{createTime}
+            </if>
+            <if test="updateUser != null">
+                and update_user = #{updateUser}
+            </if>
+            <if test="updateTime != null">
+                and update_time = #{updateTime}
+            </if>
+            <if test="orderNum != null">
+                and order_num = #{orderNum}
+            </if>
+        </where>
+    </select>
+
+    &lt;!&ndash;新增所有列&ndash;&gt;
+    <insert id="insert" keyProperty="menuId" useGeneratedKeys="true">
+        insert into xc.sys_menu(menu_name, parent_id, path, component, perms, icon, menu_state, menu_type, remark, create_user, create_time, update_user, update_time, order_num)
+        values (#{menuName}, #{parentId}, #{path}, #{component}, #{perms}, #{icon}, #{menuState}, #{menuType}, #{remark}, #{createUser}, #{createTime}, #{updateUser}, #{updateTime}, #{orderNum})
+    </insert>
+
+    &lt;!&ndash;通过主键修改数据&ndash;&gt;
+    <update id="update">
+        update xc.sys_menu
+        <set>
+            <if test="menuName != null and menuName != ''">
+                menu_name = #{menuName},
+            </if>
+            <if test="parentId != null">
+                parent_id = #{parentId},
+            </if>
+            <if test="path != null and path != ''">
+                path = #{path},
+            </if>
+            <if test="component != null and component != ''">
+                component = #{component},
+            </if>
+            <if test="perms != null and perms != ''">
+                perms = #{perms},
+            </if>
+            <if test="icon != null and icon != ''">
+                icon = #{icon},
+            </if>
+            <if test="menuState != null">
+                menu_state = #{menuState},
+            </if>
+            <if test="menuType != null">
+                menu_type = #{menuType},
+            </if>
+            <if test="remark != null and remark != ''">
+                remark = #{remark},
+            </if>
+            <if test="createUser != null">
+                create_user = #{createUser},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime},
+            </if>
+            <if test="updateUser != null">
+                update_user = #{updateUser},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime},
+            </if>
+            <if test="orderNum != null">
+                order_num = #{orderNum},
+            </if>
+        </set>
+        where menu_id = #{menuId}
+    </update>
+
+    &lt;!&ndash;通过主键删除&ndash;&gt;
+    <delete id="deleteById">
+        delete from xc.sys_menu where menu_id = #{menuId}
+    </delete>-->
+
+</mapper>
