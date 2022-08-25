@@ -30,3 +30,13 @@ build/
 
 ### VS Code ###
 .vscode/
+common/README.md
+common/src/main/resources/
+common/src/test/
+common/target/
+gateway/src/test/
+gateway/target/
+photo/src/test/
+photo/target/
+system/src/test/
+system/target/
