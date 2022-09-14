@@ -54,4 +54,10 @@ public interface SysMenuService extends IService<SysMenu> {
      * @return 返回是否成功
      */
     FanResponse changeState(SysMenu sysMenu);
+
+    /**
+     * 查询所有菜单
+     * @return
+     */
+    FanResponse getMenus();
 }

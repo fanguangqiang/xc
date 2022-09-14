@@ -24,16 +24,21 @@ public class SysMenuController {
     @Resource
     private SysMenuService sysMenuService;
 
-    @ApiOperation(value = "通过用户id查询菜单列表")
+    @ApiOperation(value = "路由查询菜单列表")
     @GetMapping("routers")
     public FanResponse getUserRouters(){
         return sysMenuService.getMenuByUserId();
     }
 
-    @ApiOperation(value = "通过用户id和搜索条件查询菜单列表")
+    @ApiOperation(value = "根据条件分页查询菜单列表")
     @GetMapping
     public FanResponse list(PageVo pageVo, SysMenu sysMenu){
         return sysMenuService.getMenuList(pageVo,sysMenu);
+    }
+    @ApiOperation(value = "查询菜单列表")
+    @GetMapping("menus")
+    public FanResponse menus(){
+        return sysMenuService.getMenus();
     }
 
     @ApiOperation(value = "添加菜单")

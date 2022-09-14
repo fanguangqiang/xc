@@ -21,6 +21,7 @@
         <module>gateway</module>
         <module>system</module>
         <module>photo</module>
+        <module>manage</module>
     </modules>
     <properties>
         <java.version>1.8</java.version>

@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mapper.dao.ManageDao">
+
+    <resultMap type="com.fan.manage.entity.Manage" id="ManageMap">
+        <result property="mId" column="m_id" jdbcType="INTEGER"/>
+        <result property="account" column="account" jdbcType="VARCHAR"/>
+        <result property="loginPw" column="login_pw" jdbcType="VARCHAR"/>
+        <result property="accName" column="acc_name" jdbcType="VARCHAR"/>
+        <result property="payPw" column="pay_pw" jdbcType="VARCHAR"/>
+        <result property="remark" column="remark" jdbcType="VARCHAR"/>
+        <result property="userId" column="user_id" jdbcType="INTEGER"/>
+        <result property="createtime" column="createtime" jdbcType="TIMESTAMP"/>
+        <result property="updatetime" column="updatetime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <!--&lt;!&ndash;查询单个&ndash;&gt;-->
+    <!--<select id="queryById" resultMap="ManageMap">-->
+        <!--select-->
+          <!--m_id, account, login_pw, acc_name, pay_pw, remark, user_id, createtime, updatetime-->
+        <!--from manage-->
+        <!--where m_id = #{mId}-->
+    <!--</select>-->
+
+    <!--&lt;!&ndash;查询指定行数据&ndash;&gt;-->
+    <!--<select id="queryAllByLimit" resultMap="ManageMap">-->
+        <!--select-->
+          <!--m_id, account, login_pw, acc_name, pay_pw, remark, user_id, createtime, updatetime-->
+        <!--from manage-->
+        <!--<where>-->
+            <!--<if test="mId != null">-->
+                <!--and m_id = #{mId}-->
+            <!--</if>-->
+            <!--<if test="account != null and account != ''">-->
+                <!--and account = #{account}-->
+            <!--</if>-->
+            <!--<if test="loginPw != null and loginPw != ''">-->
+                <!--and login_pw = #{loginPw}-->
+            <!--</if>-->
+            <!--<if test="accName != null and accName != ''">-->
+                <!--and acc_name = #{accName}-->
+            <!--</if>-->
+            <!--<if test="payPw != null and payPw != ''">-->
+                <!--and pay_pw = #{payPw}-->
+            <!--</if>-->
+            <!--<if test="remark != null and remark != ''">-->
+                <!--and remark = #{remark}-->
+            <!--</if>-->
+            <!--<if test="userId != null">-->
+                <!--and user_id = #{userId}-->
+            <!--</if>-->
+            <!--<if test="createtime != null">-->
+                <!--and createtime = #{createtime}-->
+            <!--</if>-->
+            <!--<if test="updatetime != null">-->
+                <!--and updatetime = #{updatetime}-->
+            <!--</if>-->
+        <!--</where>-->
+        <!--limit #{pageable.offset}, #{pageable.pageSize}-->
+    <!--</select>-->
+
+    <!--&lt;!&ndash;统计总行数&ndash;&gt;-->
+    <!--<select id="count" resultType="java.lang.Long">-->
+        <!--select count(1)-->
+        <!--from manage-->
+        <!--<where>-->
+            <!--<if test="mId != null">-->
+                <!--and m_id = #{mId}-->
+            <!--</if>-->
+            <!--<if test="account != null and account != ''">-->
+                <!--and account = #{account}-->
+            <!--</if>-->
+            <!--<if test="loginPw != null and loginPw != ''">-->
+                <!--and login_pw = #{loginPw}-->
+            <!--</if>-->
+            <!--<if test="accName != null and accName != ''">-->
+                <!--and acc_name = #{accName}-->
+            <!--</if>-->
+            <!--<if test="payPw != null and payPw != ''">-->
+                <!--and pay_pw = #{payPw}-->
+            <!--</if>-->
+            <!--<if test="remark != null and remark != ''">-->
+                <!--and remark = #{remark}-->
+            <!--</if>-->
+            <!--<if test="userId != null">-->
+                <!--and user_id = #{userId}-->
+            <!--</if>-->
+            <!--<if test="createtime != null">-->
+                <!--and createtime = #{createtime}-->
+            <!--</if>-->
+            <!--<if test="updatetime != null">-->
+                <!--and updatetime = #{updatetime}-->
+            <!--</if>-->
+        <!--</where>-->
+    <!--</select>-->
+
+    <!--&lt;!&ndash;新增所有列&ndash;&gt;-->
+    <!--<insert id="insert" keyProperty="mId" useGeneratedKeys="true">-->
+        <!--insert into manage(account, login_pw, acc_name, pay_pw, remark, user_id, createtime, updatetime)-->
+        <!--values (#{account}, #{loginPw}, #{accName}, #{payPw}, #{remark}, #{userId}, #{createtime}, #{updatetime})-->
+    <!--</insert>-->
+
+    <!--<insert id="insertBatch" keyProperty="mId" useGeneratedKeys="true">-->
+        <!--insert into manage(account, login_pw, acc_name, pay_pw, remark, user_id, createtime, updatetime)-->
+        <!--values-->
+        <!--<foreach collection="entities" item="entity" separator=",">-->
+        <!--(#{entity.account}, #{entity.loginPw}, #{entity.accName}, #{entity.payPw}, #{entity.remark}, #{entity.userId}, #{entity.createtime}, #{entity.updatetime})-->
+        <!--</foreach>-->
+    <!--</insert>-->
+
+    <!--<insert id="insertOrUpdateBatch" keyProperty="mId" useGeneratedKeys="true">-->
+        <!--insert into manage(account, login_pw, acc_name, pay_pw, remark, user_id, createtime, updatetime)-->
+        <!--values-->
+        <!--<foreach collection="entities" item="entity" separator=",">-->
+            <!--(#{entity.account}, #{entity.loginPw}, #{entity.accName}, #{entity.payPw}, #{entity.remark}, #{entity.userId}, #{entity.createtime}, #{entity.updatetime})-->
+        <!--</foreach>-->
+        <!--on duplicate key update-->
+        <!--account = values(account),-->
+        <!--login_pw = values(login_pw),-->
+        <!--acc_name = values(acc_name),-->
+        <!--pay_pw = values(pay_pw),-->
+        <!--remark = values(remark),-->
+        <!--user_id = values(user_id),-->
+        <!--createtime = values(createtime),-->
+        <!--updatetime = values(updatetime)-->
+    <!--</insert>-->
+
+    <!--&lt;!&ndash;通过主键修改数据&ndash;&gt;-->
+    <!--<update id="update">-->
+        <!--update manage-->
+        <!--<set>-->
+            <!--<if test="account != null and account != ''">-->
+                <!--account = #{account},-->
+            <!--</if>-->
+            <!--<if test="loginPw != null and loginPw != ''">-->
+                <!--login_pw = #{loginPw},-->
+            <!--</if>-->
+            <!--<if test="accName != null and accName != ''">-->
+                <!--acc_name = #{accName},-->
+            <!--</if>-->
+            <!--<if test="payPw != null and payPw != ''">-->
+                <!--pay_pw = #{payPw},-->
+            <!--</if>-->
+            <!--<if test="remark != null and remark != ''">-->
+                <!--remark = #{remark},-->
+            <!--</if>-->
+            <!--<if test="userId != null">-->
+                <!--user_id = #{userId},-->
+            <!--</if>-->
+            <!--<if test="createtime != null">-->
+                <!--createtime = #{createtime},-->
+            <!--</if>-->
+            <!--<if test="updatetime != null">-->
+                <!--updatetime = #{updatetime},-->
+            <!--</if>-->
+        <!--</set>-->
+        <!--where m_id = #{mId}-->
+    <!--</update>-->
+
+    <!--&lt;!&ndash;通过主键删除&ndash;&gt;-->
+    <!--<delete id="deleteById">-->
+        <!--delete from manage where m_id = #{mId}-->
+    <!--</delete>-->
+
+</mapper>
+

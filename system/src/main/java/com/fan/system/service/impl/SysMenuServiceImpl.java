@@ -13,6 +13,7 @@ import com.fan.system.FanUtils;
 import com.fan.system.dao.SysMenuDao;
 import com.fan.system.entity.SysMenu;
 import com.fan.system.service.SysMenuService;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -120,6 +121,9 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuDao,SysMenu> implemen
         sysMenu.setCreateUser(userId);
         sysMenu.setUpdateTime(DateUtils.getNowDate());
         sysMenu.setUpdateUser(userId);
+        if(StringUtils.isBlank(sysMenu.getComponent())){
+            sysMenu.setComponent("home");
+        }
         int insert = this.baseMapper.insert(sysMenu);
         if(insert>0){
             return FanResponse.success("添加成功");
@@ -180,5 +184,17 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuDao,SysMenu> implemen
             return FanResponse.success(str + "成功");
         }
         return FanResponse.error(str + "失败");
+    }
+
+    /**
+     * 查询所有菜单
+     *
+     * @return
+     */
+    @Override
+    public FanResponse getMenus() {
+        List<SysMenu> sysMenus = this.baseMapper.selectList(null);
+        List<SysMenu> menus = router(sysMenus);
+        return FanResponse.success(menus);
     }
 }
